@@ -6,7 +6,6 @@ import {IResponseModel} from "../models/IResponseModel.ts";
 import {retriveLocalStorage} from "../helpers/api.helpers.ts";
 import {ITokenPair} from "../models/ITokenPair.ts";
 import {IUser} from "../models/IUser.ts";
-import {IRecipe} from "../models/IRecipe.ts";
 
 
 const axiosInstance = axios.create({
@@ -30,16 +29,14 @@ const login = async (loginData:ILoginDataModel):Promise<ILoginResponseModel> => 
 }
 
 
-const getUsers = async ():Promise<IUser[]> => {
-    const {data} = await axiosInstance.get<IResponseModel>(urls.users);
-    if (data.users) return data.users
-    return []
+const getUsers = async (skip:string):Promise<IResponseModel> => {
+    const {data} = await axiosInstance.get<IResponseModel>(urls.users(skip));
+    return data
 }
 
-const getRecipes = async ():Promise<IRecipe[]> => {
+const getRecipes = async ():Promise<IResponseModel> => {
     const {data} = await axiosInstance.get<IResponseModel>(urls.recipes);
-    if (data.recipes) return data.recipes
-    return []
+    return data
 }
 
 const getCurrentAuthUser = async ():Promise<IUser> => {

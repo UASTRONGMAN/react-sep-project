@@ -3,7 +3,7 @@ const baseURL = 'https://dummyjson.com/auth'
 const urls = {
     auth: '/login',
     refresh: '/refresh',
-    users: '/users',
+    users: (skip: string) => baseURL + '/users?skip=' + skip,
     me: '/me',
     recipes: '/recipes'
 

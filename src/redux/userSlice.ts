@@ -1,20 +1,25 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {IUser} from "../models/IUser.ts";
 import {getUsers} from "../services/api.services.ts";
 import {AxiosError} from "axios";
+import {IResponseModel} from "../models/IResponseModel.ts";
 
 type userSliceType = {
-    users: IUser[]
+    response: IResponseModel
 }
 
-const initialState: userSliceType = {users: []}
+const initialState: userSliceType = {response: {
+        users:[],
+        total: 0,
+        skip: 0,
+        limit: 0
+    }}
 
 const loadUsers = createAsyncThunk(
     'userSlice/loadUsers',
-    async (_, thunkAPI) => {
+    async (skip:string, thunkAPI) => {
         try {
-            const users = await getUsers();
-            return thunkAPI.fulfillWithValue(users)
+            const data = await getUsers(skip);
+            return thunkAPI.fulfillWithValue(data)
         } catch (e) {
             const error = e as AxiosError
             return thunkAPI.rejectWithValue(error)
@@ -28,7 +33,7 @@ export const userSlice = createSlice({
     reducers: {},
     extraReducers: builder => builder
         .addCase(loadUsers.fulfilled, (state, action) => {
-            state.users = action.payload
+            state.response = action.payload
         })
         .addCase(loadUsers.rejected, (state, action) => {
             console.log(state)
