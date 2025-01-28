@@ -42,6 +42,11 @@ const getRecipes = async ():Promise<IRecipe[]> => {
     return []
 }
 
+const getCurrentAuthUser = async ():Promise<IUser> => {
+    const {data} = await axiosInstance.get<IUser>(urls.me);
+    return data
+}
+
 const refresh = async () => {
     const userWithTokens = retriveLocalStorage<ILoginResponseModel>('user');
     const {data:{accessToken, refreshToken}} = await axiosInstance.post<ITokenPair>(urls.refresh, {refreshToken: userWithTokens.refreshToken, expiresInMins:1});
@@ -54,6 +59,7 @@ export {
     login,
     getUsers,
     getRecipes,
+    getCurrentAuthUser,
     refresh
 }
 

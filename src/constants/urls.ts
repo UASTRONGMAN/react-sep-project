@@ -4,6 +4,7 @@ const urls = {
     auth: '/login',
     refresh: '/refresh',
     users: '/users',
+    me: '/me',
     recipes: '/recipes'
 
 }
