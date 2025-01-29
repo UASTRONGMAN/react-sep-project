@@ -7,7 +7,7 @@ interface IProps{
     recipes: IRecipe[]
 }
 
-const User:FC<IProps> = ({user, recipes}) => {
+const User:FC<IProps> = ({user}) => {
     return (
         <div>
             <h4>{user.id}. {user.firstName} {user.lastName}</h4>

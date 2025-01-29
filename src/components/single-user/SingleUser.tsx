@@ -20,12 +20,10 @@ const SingleUser = () => {
         dispatch(recipeSliceActions.loadRecipes('0'))
     }, [id]);
 
-    const res = response.recipes.filter(value => value.userId === +id)
     return (
         <div>
-            {/*{singleUser && <User user={singleUser} recipes={response.recipes || []}/>}*/}
-            {/*{response.recipes.filter((value) => value.userId = id)}*/}
-            {response.recipes && response.recipes.filter(value => value.userId === +id)}
+            {singleUser && <User user={singleUser} recipes={response.recipes || []}/>}
+
         </div>
     );
 };
