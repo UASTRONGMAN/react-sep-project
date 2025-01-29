@@ -1,5 +1,5 @@
 import {FC} from "react";
-import {IRecipe} from "../../models/IRecipe.ts";
+import {IRecipe} from "../../../models/IRecipe.ts";
 
 interface IProps{
     recipe:IRecipe
@@ -8,8 +8,8 @@ interface IProps{
 const Recipe:FC<IProps> = ({recipe}) => {
     return (
         <div>
-            {recipe.id}. {recipe.name}. <br/>
-            {recipe.tags + ''}
+            <h4>{recipe.id} {recipe.name}</h4>
+            <p>{recipe.tags+''}</p>
         </div>
     );
 };

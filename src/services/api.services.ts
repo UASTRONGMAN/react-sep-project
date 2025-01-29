@@ -6,6 +6,7 @@ import {IResponseModel} from "../models/IResponseModel.ts";
 import {retriveLocalStorage} from "../helpers/api.helpers.ts";
 import {ITokenPair} from "../models/ITokenPair.ts";
 import {IUser} from "../models/IUser.ts";
+import {IRecipe} from "../models/IRecipe.ts";
 
 
 const axiosInstance = axios.create({
@@ -50,6 +51,11 @@ const getSingleUser = async (id:string):Promise<IUser> => {
     return data
 }
 
+const getSingleRecipe = async (id: string):Promise<IRecipe> => {
+    const {data} = await axiosInstance.get<IRecipe>(urls.recipe(id));
+    return data
+}
+
 const refresh = async () => {
     const userWithTokens = retriveLocalStorage<ILoginResponseModel>('user');
     const {data:{accessToken, refreshToken}} = await axiosInstance.post<ITokenPair>(urls.refresh, {refreshToken: userWithTokens.refreshToken, expiresInMins:60});
@@ -64,6 +70,7 @@ export {
     getRecipes,
     getCurrentAuthUser,
     getSingleUser,
+    getSingleRecipe,
     refresh
 }
 

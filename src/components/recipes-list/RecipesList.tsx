@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {IRecipe} from "../../models/IRecipe.ts";
-import Recipe from "./Recipe.tsx";
+import Recipe from "./recipe/Recipe.tsx";
 
 interface IProps{
     recipes:IRecipe[]
