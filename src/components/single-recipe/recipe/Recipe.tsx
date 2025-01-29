@@ -9,7 +9,9 @@ const Recipe:FC<IProps> = ({recipe}) => {
     return (
         <div>
             <h4>{recipe.id} {recipe.name}</h4>
-            <p>{recipe.tags+''}</p>
+            <p>Tags: {recipe.tags+''}</p>
+            <p>Cuisine - {recipe.cuisine}</p>
+            <img src={recipe.image} alt="image"/>
         </div>
     );
 };
