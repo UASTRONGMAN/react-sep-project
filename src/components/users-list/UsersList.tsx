@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {IUser} from "../../models/IUser.ts";
-import User from "./User/User.tsx";
+import User from "./user/User.tsx";
 
 interface IProps{
     users:IUser[]

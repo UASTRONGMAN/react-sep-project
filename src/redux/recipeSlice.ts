@@ -1,19 +1,24 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
-import {IRecipe} from "../models/IRecipe.ts";
 import {getRecipes} from "../services/api.services.ts";
+import {IResponseModel} from "../models/IResponseModel.ts";
 
 type recipeSliceType = {
-    recipes: IRecipe[]
+    response: IResponseModel
 }
 
-const initialState: recipeSliceType = {recipes: []}
+const initialState: recipeSliceType = {response: {
+        users:[],
+        total: 0,
+        skip: 0,
+        limit: 0
+    }}
 
 const loadRecipes = createAsyncThunk(
     'recipeSlice/loadRecipes',
-    async (_, thunkAPI) => {
+    async (skip:string, thunkAPI) => {
         try {
-            const recipes = await getRecipes();
+            const recipes = await getRecipes(skip);
             return thunkAPI.fulfillWithValue(recipes)
         } catch (e) {
             const error = e as AxiosError
@@ -28,7 +33,7 @@ export const recipeSlice = createSlice({
     reducers: {},
     extraReducers: builder => builder
         .addCase(loadRecipes.fulfilled, (state, action) => {
-            state.recipes = action.payload
+            state.response = action.payload
         })
         .addCase(loadRecipes.rejected, (state, action) => {
             console.log(state)

@@ -8,7 +8,7 @@ const AuthPage = () => {
     const {register, handleSubmit} = useForm<ILoginDataModel>();
     const nav = useNavigate();
     const auth = (loginData:ILoginDataModel) => {
-        login(loginData)
+        login(loginData);
         nav('/auth')
     }
 
