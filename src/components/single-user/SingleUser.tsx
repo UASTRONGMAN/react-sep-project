@@ -1,10 +1,10 @@
 import {useAppSelector} from "../../helpers/useAppSelector.ts";
 import {useAppDispatch} from "../../helpers/useAppDispatch.ts";
 import {useEffect} from "react";
-import {userSliceActions} from "../../redux/userSlice.ts";
+import {userSliceActions} from "../../redux/slices/userSlice.ts";
 import {useParams} from "react-router-dom";
 import User from "./user/User.tsx";
-import {recipeSliceActions} from "../../redux/recipeSlice.ts";
+import {recipeSliceActions} from "../../redux/slices/recipeSlice.ts";
 
 
 const SingleUser = () => {

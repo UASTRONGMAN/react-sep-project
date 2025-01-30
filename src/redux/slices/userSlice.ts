@@ -1,13 +1,16 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {getCurrentAuthUser, getSingleUser, getUsers} from "../services/api.services.ts";
+import {createAsyncThunk, createSlice, isFulfilled, PayloadAction} from "@reduxjs/toolkit";
+import {getSingleUser, getUsers, login} from "../../services/api.services.ts";
 import {AxiosError} from "axios";
-import {IResponseModel} from "../models/IResponseModel.ts";
-import {IUser} from "../models/IUser.ts";
+import {IResponseModel} from "../../models/IResponseModel.ts";
+import {IUser} from "../../models/IUser.ts";
+import {ILoginDataModel} from "../../models/ILoginDataModel.ts";
+import {ILoginResponseModel} from "../../models/ILoginResponseModel.ts";
 
 type userSliceType = {
     response: IResponseModel,
-    currentUser: IUser | null,
-    singleUser: IUser | null
+    singleUser: IUser | null,
+    authResponse:ILoginResponseModel | null,
+    loadState: boolean
 }
 
 const initialState: userSliceType = {response: {
@@ -16,8 +19,9 @@ const initialState: userSliceType = {response: {
         skip: 0,
         limit: 0
     },
-    currentUser: null,
-    singleUser: null
+    singleUser: null,
+    authResponse: null,
+    loadState: false
 }
 
 const loadUsers = createAsyncThunk(
@@ -25,24 +29,10 @@ const loadUsers = createAsyncThunk(
     async (skip:string, thunkAPI) => {
         try {
             const data = await getUsers(skip);
-            console.log(data)
             return thunkAPI.fulfillWithValue(data)
         } catch (e) {
             const error = e as AxiosError
-            return thunkAPI.rejectWithValue(error)
-        }
-    }
-)
-
-const getCurrentUser = createAsyncThunk(
-    'userSlice/getCurrentUser',
-    async (_, thunkAPI) => {
-        try {
-            const data = await getCurrentAuthUser();
-            console.log(data)
-            return thunkAPI.fulfillWithValue(data)
-        } catch (e) {
-            const error = e as AxiosError
+            console.log(error);
             return thunkAPI.rejectWithValue(error)
         }
     }
@@ -56,6 +46,21 @@ const loadSingleUser = createAsyncThunk(
             return thunkAPI.fulfillWithValue(data)
         } catch (e) {
             const error = e as AxiosError
+            console.log(error);
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+const userAuth = createAsyncThunk(
+    'userSlice/UserAuth',
+    async (loginData:ILoginDataModel, thunkAPI) => {
+        try {
+            const data = await login(loginData);
+            return thunkAPI.fulfillWithValue(data)
+        } catch (e) {
+            const error = e as AxiosError
+            console.log(error);
             return thunkAPI.rejectWithValue(error)
         }
     }
@@ -72,7 +77,11 @@ const loadSingleUser = createAsyncThunk(
 export const userSlice = createSlice({
     name: 'userSlice',
     initialState,
-    reducers: {},
+    reducers: {
+        changeLoadState: (state, action:PayloadAction<boolean>) => {
+            state.loadState = action.payload
+        }
+    },
     extraReducers: builder => builder
         .addCase(loadUsers.fulfilled, (state, action) => {
             state.response = action.payload
@@ -81,19 +90,22 @@ export const userSlice = createSlice({
             console.log(state)
             console.log(action)
         })
-        .addCase(getCurrentUser.fulfilled, (state, action) => {
-            state.currentUser = action.payload
-        })
         .addCase(loadSingleUser.fulfilled, (state, action) => {
             state.singleUser = action.payload
         })
+        .addCase(userAuth.fulfilled, (state, action) => {
+            state.authResponse = action.payload
+        })
+        .addMatcher(isFulfilled(loadUsers, loadSingleUser), (state) => {
+            state.loadState = true
+        })
 })
 
-const userSliceActions = {...userSlice.actions, loadUsers, getCurrentUser, loadSingleUser}
+const userSliceActions = {...userSlice.actions, loadUsers, loadSingleUser, userAuth}
 
 export {
     userSliceActions,
     loadUsers,
-    getCurrentUser,
-    loadSingleUser
+    loadSingleUser,
+    userAuth
 }

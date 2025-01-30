@@ -1,12 +1,13 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, isFulfilled, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
-import {getRecipes, getSingleRecipe} from "../services/api.services.ts";
-import {IResponseModel} from "../models/IResponseModel.ts";
-import {IRecipe} from "../models/IRecipe.ts";
+import {getRecipes, getSingleRecipe} from "../../services/api.services.ts";
+import {IResponseModel} from "../../models/IResponseModel.ts";
+import {IRecipe} from "../../models/IRecipe.ts";
 
 type recipeSliceType = {
     response: IResponseModel,
-    recipe: IRecipe | null
+    recipe: IRecipe | null,
+    loadState: boolean
 }
 
 const initialState: recipeSliceType = {response: {
@@ -15,7 +16,8 @@ const initialState: recipeSliceType = {response: {
         skip: 0,
         limit: 0
     },
-    recipe: null
+    recipe: null,
+    loadState: false
 }
 
 const loadRecipes = createAsyncThunk(
@@ -47,7 +49,11 @@ const loadSingleRecipe = createAsyncThunk(
 export const recipeSlice = createSlice({
     name: 'recipeSlice',
     initialState,
-    reducers: {},
+    reducers: {
+        changeLoadState:(state, action:PayloadAction<boolean>) => {
+            state.loadState = action.payload
+        }
+    },
     extraReducers: builder => builder
         .addCase(loadRecipes.fulfilled, (state, action) => {
             state.response = action.payload
@@ -59,6 +65,9 @@ export const recipeSlice = createSlice({
         .addCase(loadSingleRecipe.fulfilled, (state, action) => {
             state.recipe = action.payload
         })
+        .addMatcher(isFulfilled(loadRecipes, loadSingleRecipe), (state) => {
+            state.loadState = true
+        })
 })
 
 const recipeSliceActions = {...recipeSlice.actions, loadRecipes, loadSingleRecipe}
@@ -66,5 +75,5 @@ const recipeSliceActions = {...recipeSlice.actions, loadRecipes, loadSingleRecip
 export {
     recipeSliceActions,
     loadRecipes,
-    loadSingleRecipe
+    loadSingleRecipe,
 }

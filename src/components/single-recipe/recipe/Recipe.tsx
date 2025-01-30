@@ -8,10 +8,12 @@ interface IProps{
 const Recipe:FC<IProps> = ({recipe}) => {
     return (
         <div>
-            <h4>{recipe.id} {recipe.name}</h4>
-            <p>Tags: {recipe.tags+''}</p>
-            <p>Cuisine - {recipe.cuisine}</p>
-            <img src={recipe.image} alt="image"/>
+            <div>
+                <h4>{recipe.id} {recipe.name}</h4>
+                <p>Tags: {recipe.tags + ''}</p>
+                <p>Cuisine - {recipe.cuisine}</p>
+            </div>
+            <div><img src={recipe.image} alt="image"/></div>
         </div>
     );
 };

@@ -2,7 +2,7 @@ import {useParams} from "react-router-dom";
 import {useAppSelector} from "../../helpers/useAppSelector.ts";
 import {useAppDispatch} from "../../helpers/useAppDispatch.ts";
 import {useEffect} from "react";
-import {recipeSliceActions} from "../../redux/recipeSlice.ts";
+import {recipeSliceActions} from "../../redux/slices/recipeSlice.ts";
 import Recipe from "./recipe/Recipe.tsx";
 
 

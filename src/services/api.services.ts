@@ -40,12 +40,6 @@ const getRecipes = async (skip:string):Promise<IResponseModel> => {
     return data
 }
 
-const getCurrentAuthUser = async ():Promise<IUser> => {
-    const {data} = await axiosInstance.get<IUser>(urls.me);
-    console.log(data)
-    return data
-}
-
 const getSingleUser = async (id:string):Promise<IUser> => {
     const {data} = await axiosInstance.get<IUser>(urls.user(id));
     return data
@@ -68,7 +62,6 @@ export {
     login,
     getUsers,
     getRecipes,
-    getCurrentAuthUser,
     getSingleUser,
     getSingleRecipe,
     refresh

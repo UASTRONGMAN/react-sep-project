@@ -1,14 +1,17 @@
 import {useForm} from "react-hook-form";
-import {login} from "../services/api.services.ts";
 import {ILoginDataModel} from "../models/ILoginDataModel.ts";
 import {useNavigate} from "react-router-dom";
+import {userSliceActions} from "../redux/slices/userSlice.ts";
+import {useAppDispatch} from "../helpers/useAppDispatch.ts";
 
 
 const AuthPage = () => {
+
+    const dispatch = useAppDispatch();
     const {register, handleSubmit} = useForm<ILoginDataModel>();
     const nav = useNavigate();
     const auth = (loginData:ILoginDataModel) => {
-        login(loginData);
+        dispatch(userSliceActions.userAuth(loginData))
         nav('/auth')
     }
 

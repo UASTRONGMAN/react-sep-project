@@ -16,9 +16,17 @@ const User:FC<IProps> = ({user, recipes}) => {
             <p>Email - {user.email}.</p>
             <p>Date of birth - {user.birthDate}.</p>
             <p>Phone number - {user.phone}.</p>
-
             <p>User recipes:</p>
-            <Link to={`/auth/recipes/${recipes.map(recipe => recipe.id)}`}>{recipes.map(recipe => <div>{recipe.id} {recipe.name}.</div>)}</Link>
+
+            {recipes.length > 0 ? (
+                <Link to={`/auth/recipes/${recipes.map(recipe => recipe.id).join(",")}`}>
+                    {recipes.map(recipe => (
+                        <div key={recipe.id}>{recipe.id} {recipe.name}.</div>
+                    ))}
+                </Link>
+            ) : (
+                <p>User doesn't have any recipes.</p>
+            )}
         </div>
     );
 };
