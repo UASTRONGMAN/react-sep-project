@@ -50,6 +50,11 @@ const getSingleRecipe = async (id: string):Promise<IRecipe> => {
     return data
 }
 
+const getRecipeByTag = async (tag:string):Promise<IResponseModel> => {
+    const {data} = await axiosInstance.get<IResponseModel>(urls.recipeByTag(tag));
+    return data
+}
+
 const refresh = async () => {
     const userWithTokens = retriveLocalStorage<ILoginResponseModel>('user');
     const {data:{accessToken, refreshToken}} = await axiosInstance.post<ITokenPair>(urls.refresh, {refreshToken: userWithTokens.refreshToken, expiresInMins:60});
@@ -64,6 +69,7 @@ export {
     getRecipes,
     getSingleUser,
     getSingleRecipe,
+    getRecipeByTag,
     refresh
 }
 

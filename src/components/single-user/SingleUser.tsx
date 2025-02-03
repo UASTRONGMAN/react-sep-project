@@ -9,7 +9,6 @@ import {recipeSliceActions} from "../../redux/slices/recipeSlice.ts";
 
 const SingleUser = () => {
     const {id} = useParams();
-    console.log(id)
     const {singleUser} = useAppSelector(value => value.userSlice);
     const {response} = useAppSelector(value => value.recipeSlice);
     const dispatch = useAppDispatch();

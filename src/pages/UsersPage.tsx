@@ -6,6 +6,7 @@ import UsersList from "../components/users-list/UsersList.tsx";
 import Pagination from "../components/pagination/Pagination.tsx";
 import {useSearchParams} from "react-router-dom";
 import Search from "../components/search/Search.tsx";
+import {refresh} from "../services/api.services.ts";
 
 
 const UsersPage = () => {
@@ -15,11 +16,23 @@ const UsersPage = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(userSliceActions.loadUsers(skip || '0'))
+
+        const loadRec = async () => {
+            try {
+                await dispatch(userSliceActions.loadUsers(skip || '0')).unwrap()
+            } catch (error) {
+                console.log(error)
+                await refresh()
+                dispatch(userSliceActions.loadUsers(skip || '0'))
+            }
+        }
+        loadRec()
     }, [skip]);
+
+
     return (
         <div>
-            <Search/>
+            <Search request_type={'users'}/>
             {!loadState && <div>Loading...</div>}
             {response.users && <UsersList users={response.users}/>}
             <Pagination props={response}/>

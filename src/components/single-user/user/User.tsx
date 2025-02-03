@@ -17,7 +17,6 @@ const User:FC<IProps> = ({user, recipes}) => {
             <p>Date of birth - {user.birthDate}.</p>
             <p>Phone number - {user.phone}.</p>
             <p>User recipes:</p>
-
             {recipes.length > 0 ? (
                 <Link to={`/auth/recipes/${recipes.map(recipe => recipe.id).join(",")}`}>
                     {recipes.map(recipe => (

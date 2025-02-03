@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, isFulfilled, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, isFulfilled, isRejected, PayloadAction} from "@reduxjs/toolkit";
 import {getSingleUser, getUsers, login} from "../../services/api.services.ts";
 import {AxiosError} from "axios";
 import {IResponseModel} from "../../models/IResponseModel.ts";
@@ -10,7 +10,8 @@ type userSliceType = {
     response: IResponseModel,
     singleUser: IUser | null,
     authResponse:ILoginResponseModel | null,
-    loadState: boolean
+    loadState: boolean,
+    error: boolean
 }
 
 const initialState: userSliceType = {response: {
@@ -21,7 +22,8 @@ const initialState: userSliceType = {response: {
     },
     singleUser: null,
     authResponse: null,
-    loadState: false
+    loadState: false,
+    error: false
 }
 
 const loadUsers = createAsyncThunk(
@@ -67,13 +69,6 @@ const userAuth = createAsyncThunk(
 )
 
 
-// const refresh = createAsyncThunk(
-//     'userSlice/refresh',
-//     async () => {
-//         await
-//     }
-// )
-
 export const userSlice = createSlice({
     name: 'userSlice',
     initialState,
@@ -98,6 +93,9 @@ export const userSlice = createSlice({
         })
         .addMatcher(isFulfilled(loadUsers, loadSingleUser), (state) => {
             state.loadState = true
+        })
+        .addMatcher(isRejected(loadUsers, loadSingleUser, userAuth), state => {
+            state.error = true
         })
 })
 

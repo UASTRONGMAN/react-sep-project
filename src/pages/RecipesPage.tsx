@@ -5,6 +5,8 @@ import {recipeSliceActions} from "../redux/slices/recipeSlice.ts";
 import RecipesList from "../components/recipes-list/RecipesList.tsx";
 import Pagination from "../components/pagination/Pagination.tsx";
 import {useSearchParams} from "react-router-dom";
+import Search from "../components/search/Search.tsx";
+import {refresh} from "../services/api.services.ts";
 
 
 const RecipesPage = () => {
@@ -14,10 +16,20 @@ const RecipesPage = () => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(recipeSliceActions.loadRecipes(skip || '0'))
+        const loadRec = async () => {
+            try {
+                await dispatch(recipeSliceActions.loadRecipes(skip || '0')).unwrap()
+            } catch (error) {
+                console.log(error)
+                await refresh()
+                dispatch(recipeSliceActions.loadRecipes(skip || '0'))
+            }
+        }
+        loadRec()
     }, [skip]);
     return (
         <div>
+            <Search request_type={'recipes'}/>
             {!loadState && <div>Loading...</div>}
             {response.recipes && <RecipesList recipes={response.recipes}/>}
             <Pagination props={response}/>
