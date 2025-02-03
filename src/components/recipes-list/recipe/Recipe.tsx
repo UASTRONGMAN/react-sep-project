@@ -12,7 +12,7 @@ const Recipe:FC<IProps> = ({recipe}) => {
             <Link to={`${recipe.id}`}>{recipe.id}. {recipe.name}.</Link> <br/>
             <div>
                 {recipe.tags.map((tag) => (
-                    <Link to={`${tag}`}>{tag + ' '}</Link>
+                    <Link to={`tag/${tag}`} key={tag}>{tag + ' '}</Link>
                 ))}
             </div>
         </div>
